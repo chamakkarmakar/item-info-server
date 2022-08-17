@@ -19,11 +19,19 @@ async function run () {
         console.log('stock management database connected');
 
         // add items
-        app.post('/items', async (req, res) => {
+        app.post('/item', async (req, res) => {
             const newItem = req.body;
             const result = await itemCollection.insertOne(newItem);
             res.send(result);
-        })
+        });
+
+        // load all data 
+        app.get('/items', async (req, res) => {
+            const query = {};
+            const cursor = itemCollection.find(query);
+            const items = await cursor.toArray();
+            res.send(items);
+        });
     }
     finally {
 
