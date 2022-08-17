@@ -17,6 +17,13 @@ async function run () {
         await client.connect();
         const itemCollection = client.db('dbItemInfo').collection('items');
         console.log('stock management database connected');
+
+        // add items
+        app.post('/items', async (req, res) => {
+            const newItem = req.body;
+            const result = await itemCollection.insertOne(newItem);
+            res.send(result);
+        })
     }
     finally {
 
