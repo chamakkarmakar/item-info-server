@@ -16,6 +16,8 @@ async function run () {
     try {
         await client.connect();
         const itemCollection = client.db('dbItemInfo').collection('items');
+        const subCategoryCollection = client.db('dbItemInfo').collection('sub-category');
+        const unitCollection = client.db('dbItemInfo').collection('unit-name');
         console.log('stock management database connected');
 
         // add items
@@ -25,12 +27,59 @@ async function run () {
             res.send(result);
         });
 
+        // add sub
+        app.post('/subcategory', async (req, res) => {
+            const sub = req.body;
+            const result = await subCategoryCollection.insertOne(sub);
+            res.send(result);
+        });
+
+        // add unit
+        app.post('/unit', async (req, res) => {
+            const unit = req.body;
+            const result = await unitCollection.insertOne(unit);
+            res.send(result);
+        });
+
+
+
+        // modify
+        // app.put('/subcategory', async(req,res) =>{
+        //     const sub = req.body;
+        //     console.log(sub);
+        //     const filter = {};
+        //     const update = {
+        //         $set : {
+        //              sub
+        //         }
+        //     };
+        //     const option = {upsert:true};
+        //     const result = await subCategoryCollection.updateOne(filter,update,option);
+        //     res.send(result);
+        // })
+
         // load all data 
         app.get('/items', async (req, res) => {
             const query = {};
             const cursor = itemCollection.find(query);
             const items = await cursor.toArray();
             res.send(items);
+        });
+
+        // load all sub 
+        app.get('/subcategory', async (req, res) => {
+            const query = {};
+            const cursor = subCategoryCollection.find(query);
+            const sub = await cursor.toArray();
+            res.send(sub);
+        });
+
+        // load all unit
+        app.get('/unit', async (req, res) => {
+            const query = {};
+            const cursor = unitCollection.find(query);
+            const unit = await cursor.toArray();
+            res.send(unit);
         });
     }
     finally {
