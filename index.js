@@ -44,19 +44,19 @@ async function run () {
 
 
         // modify
-        // app.put('/subcategory', async(req,res) =>{
-        //     const sub = req.body;
-        //     console.log(sub);
-        //     const filter = {};
-        //     const update = {
-        //         $set : {
-        //              sub
-        //         }
-        //     };
-        //     const option = {upsert:true};
-        //     const result = await subCategoryCollection.updateOne(filter,update,option);
-        //     res.send(result);
-        // })
+        app.put('/subcategory', async(req,res) =>{
+            const sub = req.body;
+            console.log(sub);
+            const filter = {};
+            const update = {
+                $set : {
+                     sub
+                }
+            };
+            const option = {upsert:true};
+            const result = await subCategoryCollection.updateOne(filter,update,option);
+            res.send(result);
+        })
 
         // load all data 
         app.get('/items', async (req, res) => {
