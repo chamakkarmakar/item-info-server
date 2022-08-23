@@ -23,7 +23,7 @@ async function run () {
         // add items
         app.post('/item', async (req, res) => {
             const newItem = req.body;
-            const result = await itemCollection.insertOne(newItem);
+            const result = await itemCollection.insertMany(newItem);
             res.send(result);
         });
 
@@ -44,17 +44,21 @@ async function run () {
 
 
         // modify
-        app.put('/subcategory', async(req,res) =>{
-            const sub = req.body;
-            console.log(sub);
-            const filter = {};
+        app.put('/item/:id', async(req,res) =>{
+            const id = req.params.id;
+            const updatedItem = req.body;
+            const filter = {_id: ObjectId(id)};
             const update = {
                 $set : {
-                     sub
+                     itemType : updatedItem.itemType,
+                     itemName : updatedItem.itemName,
+                     subCategory : updatedItem.subCat,
+                     unit : updatedItem.unit,
+                     stockLimit : updatedItem.stock
                 }
             };
             const option = {upsert:true};
-            const result = await subCategoryCollection.updateOne(filter,update,option);
+            const result = await itemCollection.updateOne(filter,update,option);
             res.send(result);
         })
 
@@ -64,6 +68,14 @@ async function run () {
             const cursor = itemCollection.find(query);
             const items = await cursor.toArray();
             res.send(items);
+        });
+
+        // load single data
+        app.get('/item/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const item = await itemCollection.findOne(query);
+            res.send(item);
         });
 
         // load all sub 
