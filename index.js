@@ -41,8 +41,6 @@ async function run () {
             res.send(result);
         });
 
-
-
         // modify
         app.put('/item/:id', async(req,res) =>{
             const id = req.params.id;
@@ -50,10 +48,10 @@ async function run () {
             const filter = {_id: ObjectId(id)};
             const update = {
                 $set : {
-                     itemType : updatedItem.itemType,
-                     itemName : updatedItem.itemName,
+                     itemType : updatedItem.type,
+                     itemName : updatedItem.name,
                      subCategory : updatedItem.subCat,
-                     unit : updatedItem.unit,
+                     unit : updatedItem.unitName,
                      stockLimit : updatedItem.stock
                 }
             };
